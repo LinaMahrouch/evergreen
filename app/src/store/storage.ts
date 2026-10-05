@@ -10,6 +10,8 @@ export const KEYS = {
   meta: 'evergreen.meta.v1',
   remote: 'evergreen.remote.v1',
   token: 'evergreen.token.v1',
+  coach: 'evergreen.coach.v1',
+  coachKey: 'evergreen.coach.key.v1',
 } as const
 
 export async function readJson<T>(key: string): Promise<T | null> {
@@ -51,4 +53,23 @@ export async function writeToken(token: string | null): Promise<void> {
     } else if (token) await AsyncStorage.setItem(KEYS.token, token)
     else await AsyncStorage.removeItem(KEYS.token)
   } catch { /* the pairing then lasts until the app closes; pairing again fixes it */ }
+}
+
+/** Any other secret (the coach's API key): the keychain on a phone, the browser's storage on the web. */
+export async function readSecret(key: string): Promise<string | null> {
+  try {
+    return secure ? await SecureStore.getItemAsync(key) : await AsyncStorage.getItem(key)
+  } catch {
+    return null
+  }
+}
+
+export async function writeSecret(key: string, value: string | null): Promise<void> {
+  try {
+    if (secure) {
+      if (value) await SecureStore.setItemAsync(key, value)
+      else await SecureStore.deleteItemAsync(key)
+    } else if (value) await AsyncStorage.setItem(key, value)
+    else await AsyncStorage.removeItem(key)
+  } catch { /* it then lasts until the app closes; entering it again fixes it */ }
 }

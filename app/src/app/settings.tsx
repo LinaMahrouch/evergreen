@@ -1,8 +1,10 @@
 import Constants from 'expo-constants'
 import { router } from 'expo-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Linking, View } from 'react-native'
 import { convertStateUnit, fmtNum, fmtSec, type Unit } from '@/engine'
+import { MODELS } from '@/coach/client'
+import { useCoach } from '@/coach/useCoach'
 import { exportBackup, pickBackup } from '@/lib/backup'
 import { SOURCE_URL } from '@/lib/config'
 import { DEF, useStore } from '@/store/useStore'
@@ -26,6 +28,12 @@ export default function Settings() {
   const update = useStore(s => s.update)
   const replace = useStore(s => s.replace)
   const [busy, setBusy] = useState(false)
+  const coach = useCoach()
+  useEffect(() => { void coach.boot() }, [coach.boot])
+
+  const removeKey = async () => {
+    if (await confirm('Remove the API key?', 'The coach stops working on this device until you enter a key again. Your plan and your log are not touched.', 'Remove')) await coach.setKey(null)
+  }
 
   const setUnit = async (to: Unit) => {
     if (to === S.unit) return
@@ -114,6 +122,18 @@ export default function Settings() {
         />
       </Section>
 
+      <Section label="Coach">
+        {coach.hasKey ? (
+          <>
+            <Segmented options={MODELS.map(m => ({ value: m.value, label: m.label }))} value={coach.model} onChange={coach.setModel} />
+            <Txt variant="label" dim style={{ marginTop: SP.md, fontWeight: '400' }}>{MODELS.find(m => m.value === coach.model)?.note}</Txt>
+            <View style={{ marginTop: SP.lg, alignItems: 'flex-start' }}><Link label="Remove the API key" onPress={() => { void removeKey() }} /></View>
+          </>
+        ) : (
+          <Txt dim>The Coach tab plans your training when you give it an Anthropic API key. Nothing is sent anywhere until you do.</Txt>
+        )}
+      </Section>
+
       <Section label="Sync">
         <Line />
         {remote ? (
@@ -135,7 +155,7 @@ export default function Settings() {
           </>
         )}
         <View style={{ marginTop: SP.lg, alignItems: 'flex-start' }}>
-          <Link label="Plan with an AI assistant" onPress={() => router.push('/assistant')} />
+          <Link label="Use your own AI assistant instead" onPress={() => router.push('/assistant')} />
         </View>
       </Section>
 

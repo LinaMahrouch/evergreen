@@ -39,13 +39,15 @@ it, or on Google Play.
 
 ```
 src/app/        the screens. One file per screen (Expo Router).
-  (tabs)/         Today · Plan · Log · Progress
+  (tabs)/         Today · Plan · Coach · Log · Progress
   workout.tsx     the session in progress
   routine/[id]    a routine and its exercises;  slot.tsx  one exercise's sets, reps, weight
   pick.tsx        the exercise library;         exercise/[id]  one exercise
   connect.tsx     pairing with a server;        settings.tsx, assistant.tsx
 src/ui/         the design system: theme.ts (three colours), index.tsx (every component)
 src/store/      useStore.ts (the profile, the session, sync), api.ts, storage.ts
+src/coach/      the built-in coach: client.ts (the request to Anthropic), tools.ts (what it can
+                read and change), useCoach.ts (the conversation)
 src/lib/        text formatting, stats, backup, config
 src/engine/     openGym's training logic. lib/ is copied in, index.js is the door to it.
 scripts/        sync-engine, make-icons, finish-web, build-android, serve-web
@@ -67,6 +69,19 @@ from `@/engine` (`src/engine/index.js`, typed by `index.d.ts`), never from `lib/
 Because of this the profile the app keeps is an openGym state document, field for field. A
 backup exported here imports into openGym, a workout logged here opens correctly there, and
 fields this app never shows (set in openGym's own web app) are kept intact through a sync.
+
+### The coach
+
+`src/coach/`. A chat with Claude, called straight from the device with the user's own Anthropic
+API key (kept in the keychain; in a browser, in its storage). Each turn sends fixed
+instructions, the profile as it is now, and the conversation; Claude answers with words or with
+tool calls, which `tools.ts` runs against the store and sends back, until it has nothing more
+to do.
+
+The writes are not written here. They are `../frontend/src/lib/plan-apply.js`, the same
+functions the MCP server runs, so the coach and an outside assistant change a profile in
+exactly the same way and one set of tests (`../mcp/test`) covers both. A write is tried on a
+copy first: a request the engine refuses changes nothing.
 
 ### Sync
 

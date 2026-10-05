@@ -28,3 +28,9 @@ export { starterPlanOptions, buildStarterPlan } from './lib/starter.js'
 export { deleteRoutine, copyRoutine } from './lib/routines.js'
 export { convertStateUnit } from './lib/units.js'
 export { buildPlannedEntry } from './lib/session-start.js'
+
+// What the built-in coach may do to the plan — the same functions the MCP server runs.
+export {
+  KNOWN_GLYPHS, WEEKDAYS, findExercises, routineView, weekView,
+  applyPlan, applyUpdateRoutine, applyDeleteRoutine, applyWeekPlan, applyDayOverride, applyBodyweight
+} from './lib/plan-apply.js'

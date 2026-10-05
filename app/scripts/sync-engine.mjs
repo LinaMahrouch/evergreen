@@ -29,7 +29,7 @@ const ENTRY = [
   'exercises.js', 'history.js', 'format.js', 'workout-model.js',
   'session-start.js', 'session-merge.js', 'finish-workout.js',
   'progression.js', 'onerm.js', 'muscles.js',
-  'sync-merge.js', 'starter.js', 'routines.js', 'units.js'
+  'sync-merge.js', 'starter.js', 'routines.js', 'units.js', 'plan-apply.js'
 ]
 
 const IMPORT = /(?:^|\n)\s*(?:import|export)\s[^'"\n]*?from\s*['"]([^'"]+)['"]|(?:^|\n)\s*import\s*['"]([^'"]+)['"]/g

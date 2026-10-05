@@ -7,7 +7,7 @@ It is built on [openGym](README.md): this repository is openGym, plus three thin
 
 | Folder | What it is |
 |---|---|
-| `app/` | **The Evergreen app.** One React Native (Expo) codebase for the web, Android and iOS. New. |
+| `app/` | **The Evergreen app.** One React Native (Expo) codebase for the web, Android and iOS, with a coach you chat with built in. New. |
 | `mcp/` | **The assistant bridge.** openGym's MCP server, which could only read. It can now also plan: create routines, set your week. |
 | `scripts/` | **A launcher** that runs the server without Docker (`npm run setup`, `npm run server`). New. |
 
@@ -28,6 +28,25 @@ is an optional `HOST` setting in `api/server.js`.
 The app works on its own, with everything kept on the device. The server is what lets a second
 device, and the assistant, see the same profile. The assistant never talks to your phone: it
 writes to the server, and the app picks the change up on its next sync.
+
+## The coach
+
+The **Coach** tab is a chat. You say what you want ("I can only train three days this week,
+rearrange it"), and it reads your plan and your log and changes your routines and your week.
+
+It runs on Claude with **your own Anthropic API key**, which you enter once in the tab. Get one
+at <https://console.anthropic.com/settings/keys>; it is separate from a Claude subscription and
+you pay for what you use, a few cents a conversation. Settings lets you pick a cheaper model or
+remove the key.
+
+- The key stays on the device. Messages, with your plan and log, go from the device straight
+  to Anthropic; there is no server of yours or mine in between.
+- It needs no openGym server. If the app is paired with one, what the coach changes syncs like
+  any other change.
+- It can do exactly what the assistant bridge below can: routines, the week, single days,
+  weigh-ins. It cannot log or delete workouts or change settings.
+- Other people who use your published app need their own key. Letting them chat without one
+  means a small server that holds your key and pays for their messages; that is not built.
 
 ## 1. Try the app (two minutes, nothing to set up)
 
@@ -73,7 +92,7 @@ face or PIN).
 
 Anything you had already logged in Evergreen is added to your profile, not replaced.
 
-### Connect your assistant
+### Connect your own assistant (instead of, or beside, the Coach tab)
 
 1. Get a second code the same way (**Settings → Pair the mobile app**).
 2. In this folder:
@@ -200,11 +219,18 @@ Checked by actually running it:
   logged in the app reaches the server; a routine the assistant writes reaches the app; when
   both change the profile at the same moment, both changes survive (16 of 16 checks).
 - The assistant bridge: 108 automated tests.
+- The coach, in a browser, against a scripted stand-in for Anthropic's API: building a plan,
+  changing a routine, moving a day, logging a weigh-in, a refused request, an empty account,
+  a reload (18 of 18 checks).
 - The Android app, on an emulated Pixel 7 (Android 15): first launch, a starter plan, a workout
   with typed weights and the rest timer, finishing, the log and progress, duplicating a routine,
   keeping its data through an update, and pairing with a server and syncing both ways.
 
 Not done, or not checked:
+
+- **The coach has not talked to the real Claude.** I had no API key. The request it sends follows
+  Anthropic's published format and every step around it is tested, but the first real
+  conversation is yours. If it fails, the message in the chat says why.
 
 - **The app has not been run on a physical phone**, only on the emulator above (the same code,
   built for a PC's processor). Expect small things the first time you hold it: the feel of the

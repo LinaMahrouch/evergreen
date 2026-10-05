@@ -20,9 +20,9 @@ export default function Assistant() {
   return (
     <Screen>
       <TopBar />
-      <Txt variant="title" style={{ marginTop: SP.md }}>Plan with an AI assistant</Txt>
+      <Txt variant="title" style={{ marginTop: SP.md }}>Your own AI assistant</Txt>
       <Txt dim style={{ marginTop: SP.sm }}>
-        An assistant such as Claude can read your training history and write your next routines straight into your plan. You ask in your own words; it shows up here.
+        The Coach tab is the quick way. This is the other one: an assistant you already use, such as Claude on your computer, reads your training history and writes your next routines straight into your plan.
       </Txt>
 
       <Section label="How it works" first>
@@ -50,7 +50,7 @@ export default function Assistant() {
       </View>
 
       <Txt variant="label" dim style={{ marginTop: SP.xl, fontWeight: '400' }}>
-        Nothing is sent to an AI company by this app. The assistant only sees your data if you set it up, on your own computer, against your own server.
+        Set up this way, the app itself sends nothing to an AI company: the assistant reads your data from your own server, on your own computer.
       </Txt>
     </Screen>
   )

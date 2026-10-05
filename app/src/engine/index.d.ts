@@ -218,3 +218,25 @@ export function convertStateUnit(S: State, to: Unit): State
 
 /** The sets, target and prescription one planned exercise opens a session with. */
 export function buildPlannedEntry(S: State, cfg: Slot, routine: Routine | null, opts?: { noProg?: boolean }): Omit<Entry, 'id'>
+
+/* ---- lib/plan-apply.js: what the coach may do to the plan ---- */
+export interface RoutineView {
+  id: string
+  name: string
+  icon: string | null
+  progression: string
+  exercises: { position: number; id: string; name: string; summary: string; superset?: string }[]
+}
+export type WeekView = Record<string, { id: string; name: string }[]>
+export const KNOWN_GLYPHS: string[]
+export const WEEKDAYS: string[]
+export function findExercises(S: State, query: { query?: string; body_part?: string; equipment?: string; limit?: number }): { total_matches: number; returned: number; exercises: unknown[]; hint?: string }
+export function routineView(r: Routine, S: State): RoutineView
+export function weekView(S: State): WeekView
+/** Each throws an Error with a `code` when the request is not valid; the draft is then to be discarded. */
+export function applyPlan(S: State, params: any): { created: RoutineView[]; week: WeekView; unit: string }
+export function applyUpdateRoutine(S: State, params: any): { updated: RoutineView; unit: string }
+export function applyDeleteRoutine(S: State, params: any): { deleted: { id: string; name: string }; note: string; cleared_day_overrides: string[]; week: WeekView }
+export function applyWeekPlan(S: State, params: any): { week: WeekView }
+export function applyDayOverride(S: State, params: any): { date: string; override: unknown; note?: string }
+export function applyBodyweight(S: State, params: any): { date: string; weight: number; unit: string; goal: number | null }

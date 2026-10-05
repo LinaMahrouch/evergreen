@@ -6,11 +6,12 @@ import { C, MAX_WIDTH, Txt } from '@/ui'
 const TABS = [
   { name: 'index', label: 'Today' },
   { name: 'plan', label: 'Plan' },
+  { name: 'coach', label: 'Coach' },
   { name: 'history', label: 'Log' },
   { name: 'progress', label: 'Progress' },
 ] as const
 
-// Words instead of icons: four destinations are few enough to read.
+// Words instead of icons: five destinations are few enough to read.
 function TabBar({ state, navigation }: { state: { index: number; routes: { key: string; name: string }[] }; navigation: any }) {
   const insets = useSafeAreaInsets()
   return (
