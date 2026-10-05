@@ -1,10 +1,11 @@
 import { router, useLocalSearchParams } from 'expo-router'
 import { Pressable, StyleSheet, TextInput, View } from 'react-native'
 import { POLICY_DESC, copyRoutine, deleteRoutine, exLine, policyFor, type Policy, type Routine } from '@/engine'
-import { exName } from '@/lib/text'
+import { exName, exerciseOf } from '@/lib/text'
 import { useStore } from '@/store/useStore'
 import { useUI } from '@/store/useUI'
 import { Btn, C, Empty, Icon, IconBtn, Line, Link, SP, Screen, Section, Segmented, TopBar, Txt, confirm } from '@/ui'
+import { ExerciseMedia } from '@/ui/ExerciseMedia'
 
 const RULES: { value: Policy; label: string }[] = [
   { value: 'linear', label: 'Add weight' },
@@ -82,10 +83,15 @@ export default function RoutineEdit() {
                 accessibilityRole="button"
                 accessibilityLabel={`${exName(S, slot.id)}, ${exLine(slot, S.unit)}. Edit.`}
               >
-                <Txt numberOfLines={1}>{exName(S, slot.id)}</Txt>
-                <Txt variant="label" dim style={{ marginTop: 2, fontWeight: '400' }}>
-                  {exLine(slot, S.unit)}{slot.sg ? ' · superset' : ''}
-                </Txt>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: SP.md }}>
+                  <ExerciseMedia ex={exerciseOf(S, slot.id)} kind="still" size={44} />
+                  <View style={{ flex: 1 }}>
+                    <Txt numberOfLines={1}>{exName(S, slot.id)}</Txt>
+                    <Txt variant="label" dim style={{ marginTop: 2, fontWeight: '400' }}>
+                      {exLine(slot, S.unit)}{slot.sg ? ' · superset' : ''}
+                    </Txt>
+                  </View>
+                </View>
               </Pressable>
               <View style={styles.order}>
                 <Pressable onPress={() => move(i, -1)} disabled={i === 0} hitSlop={6} accessibilityRole="button" accessibilityLabel="Move up" style={i === 0 ? { opacity: 0.2 } : null}>

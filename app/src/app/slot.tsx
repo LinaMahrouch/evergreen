@@ -1,9 +1,10 @@
 import { router, useLocalSearchParams } from 'expo-router'
-import { View } from 'react-native'
+import { Pressable, View } from 'react-native'
 import { defaultConfig, fmtNum, fmtSec, isCardio, modeOf, type Mode, type Slot } from '@/engine'
-import { exName } from '@/lib/text'
+import { exName, exerciseOf } from '@/lib/text'
 import { useStore } from '@/store/useStore'
 import { Empty, Field, Link, SP, Screen, Section, Segmented, Stepper, TopBar, Txt, confirm } from '@/ui'
+import { ExerciseMedia } from '@/ui/ExerciseMedia'
 
 /** How one exercise is planned inside a routine: sets, reps or time, starting weight, rest. */
 export default function SlotEdit() {
@@ -50,8 +51,16 @@ export default function SlotEdit() {
       <TopBar title={routine.name} />
       <Txt variant="title" style={{ marginTop: SP.md }}>{exName(S, slot.id)}</Txt>
       <View style={{ marginTop: SP.sm, alignItems: 'flex-start' }}>
-        <Link label="How to do it" onPress={() => router.push(`/exercise/${slot.id}`)} />
+        <Link label="How to do it, step by step" onPress={() => router.push(`/exercise/${slot.id}`)} />
       </View>
+      <Pressable
+        onPress={() => router.push(`/exercise/${slot.id}`)}
+        accessibilityRole="button"
+        accessibilityLabel="How to do it"
+        style={{ marginTop: SP.lg, alignItems: 'center' }}
+      >
+        <ExerciseMedia ex={exerciseOf(S, slot.id)} kind="motion" size={220} />
+      </Pressable>
 
       {!cardio ? (
         <View style={{ marginTop: SP.xl }}>
