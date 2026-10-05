@@ -11,6 +11,7 @@ export const KEYS = {
   remote: 'evergreen.remote.v1',
   token: 'evergreen.token.v1',
   coach: 'evergreen.coach.v1',
+  prefs: 'evergreen.prefs.v1',
   coachKey: 'evergreen.coach.key.v1',
 } as const
 

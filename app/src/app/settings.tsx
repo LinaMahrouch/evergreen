@@ -7,6 +7,7 @@ import { MODELS } from '@/coach/client'
 import { useCoach } from '@/coach/useCoach'
 import { exportBackup, pickBackup } from '@/lib/backup'
 import { SOURCE_URL } from '@/lib/config'
+import { usePrefs } from '@/store/usePrefs'
 import { DEF, useStore } from '@/store/useStore'
 import { Btn, Line, Link, Row, SP, Screen, Section, Segmented, Stepper, TopBar, Txt, confirm, notify } from '@/ui'
 
@@ -29,6 +30,8 @@ export default function Settings() {
   const replace = useStore(s => s.replace)
   const [busy, setBusy] = useState(false)
   const coach = useCoach()
+  const animations = usePrefs(s => s.animations)
+  const setAnimations = usePrefs(s => s.setAnimations)
   useEffect(() => { void coach.boot() }, [coach.boot])
 
   const removeKey = async () => {
@@ -121,6 +124,17 @@ export default function Settings() {
           format={v => (v > 0 ? fmtNum(v) : 'None')}
           onChange={v => update(s => { s.targetW = v > 0 ? v : null })}
         />
+      </Section>
+
+      <Section label="Exercise animations">
+        <Segmented
+          options={[{ value: 'on', label: 'Show' }, { value: 'off', label: 'Hide' }]}
+          value={animations ? 'on' : 'off'}
+          onChange={v => setAnimations(v === 'on')}
+        />
+        <Txt variant="label" dim style={{ marginTop: SP.md, fontWeight: '400' }}>
+          The moving figures that show how an exercise is done. They are loaded over the internet from a third-party exercise library and are not part of this app.
+        </Txt>
       </Section>
 
       <Section label="Coach">

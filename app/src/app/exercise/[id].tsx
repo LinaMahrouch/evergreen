@@ -6,6 +6,7 @@ import { sessionsOf } from '@/lib/stats'
 import { cap, exerciseOf, setText, shortDate, weight } from '@/lib/text'
 import { useStore } from '@/store/useStore'
 import { Line, Row, SP, Screen, Section, TopBar, Txt } from '@/ui'
+import { ExerciseMedia } from '@/ui/ExerciseMedia'
 import { LineChart } from '@/ui/LineChart'
 
 export default function ExerciseDetail() {
@@ -26,6 +27,7 @@ export default function ExerciseDetail() {
       <TopBar />
       <Txt variant="title" style={{ marginTop: SP.md }}>{cap(ex.n)}</Txt>
       {facts.length ? <Txt dim style={{ marginTop: SP.sm }}>{facts.join(' · ')}</Txt> : null}
+      <View style={{ marginTop: SP.xl, alignItems: 'center' }}><ExerciseMedia ex={ex} kind="motion" size={280} /></View>
 
       {top > 0 || best ? (
         <Section label="Your best" first>

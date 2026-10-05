@@ -102,8 +102,9 @@ The session in progress never leaves the device.
   fourth colour. Green means "press this" or "done".
 - Words over icons. The tab bar is text.
 - One column, at most 560 wide, on every screen size.
-- Exercise pictures are deliberately absent: their licence is unresolved upstream
-  (`../NOTICE.md`), and the app reads fine without them.
+- Exercise animations are the one place colour comes in. They are third-party content with an
+  unresolved licence (`../NOTICE.md`): never bundled, loaded from the network by
+  `src/ui/ExerciseMedia.tsx`, and every screen reads fine without them (Settings can hide them).
 
 ## Changing the name, the icon, the ids
 

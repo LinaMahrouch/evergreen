@@ -111,7 +111,7 @@ const CSP = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline'",   // react-native-web writes its styles into a <style> tag
-  "img-src 'self' data: blob:",
+  "img-src 'self' data: blob: https://cdn.jsdelivr.net",   // the exercise pictures (src/lib/config.ts MEDIA_BASE)
   "font-src 'self' data:",
   "connect-src 'self' https: http:",
   "worker-src 'self'",

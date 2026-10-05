@@ -190,8 +190,12 @@ You may charge for the app. You may not make it closed-source.
 - `android.package` and `ios.bundleIdentifier` are `com.linamahrouch.evergreen`. **These cannot
   be changed after the first release**, so choose them now.
 
-**Exercise pictures.** Evergreen shows none, deliberately. The pictures openGym uses have an
-unresolved licence ([NOTICE.md](NOTICE.md)) and are not yours to ship in a store app.
+**Exercise pictures.** The animations and thumbnails are not yours and not openGym's: they
+belong to third parties and their licence is unresolved ([NOTICE.md](NOTICE.md)). Evergreen
+does not contain them. It loads them over the internet from the public dataset openGym uses
+(`MEDIA_BASE` in `app/src/lib/config.ts`), and Settings → Exercise animations hides them. On a
+store or a public site a rights holder may still ask you to take them down: clear it with
+them first, or ship with `animations: false` as the default in `app/src/store/usePrefs.ts`.
 
 ### Publishing the web version
 

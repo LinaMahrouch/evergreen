@@ -4,10 +4,11 @@ import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { Platform, Pressable, StyleSheet, TextInput, Vibration, View } from 'react-native'
 import { fmtNum, isWarmupRow, modeOf, type Active, type Entry, type Mode, type SetRow } from '@/engine'
-import { clock, exName, whyOf } from '@/lib/text'
+import { clock, exName, exerciseOf, whyOf } from '@/lib/text'
 import { useStore } from '@/store/useStore'
 import { useUI } from '@/store/useUI'
 import { Btn, C, Empty, Icon, Line, Link, SP, Screen, Txt, confirm, notify, parseNum } from '@/ui'
+import { ExerciseMedia } from '@/ui/ExerciseMedia'
 
 const KEEP_AWAKE = 'evergreen-workout'
 
@@ -117,7 +118,10 @@ function ExerciseBlock({ entry, index, unit }: { entry: Entry; index: number; un
   return (
     <View style={styles.block}>
       <Pressable onPress={() => router.push(`/exercise/${entry.id}`)} accessibilityRole="button" accessibilityLabel={`${name}. How to do it.`}>
-        <Txt variant="heading">{name}</Txt>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: SP.md }}>
+          <ExerciseMedia ex={exerciseOf(S, entry.id)} kind="still" size={48} />
+          <Txt variant="heading" style={{ flex: 1 }}>{name}</Txt>
+        </View>
       </Pressable>
       {why ? <Txt variant="label" dim style={{ marginTop: 2, fontWeight: '400' }}>{why}</Txt> : null}
       {entry.target?.note ? <Txt variant="label" dim style={{ marginTop: 2, fontWeight: '400' }}>{String(entry.target.note)}</Txt> : null}

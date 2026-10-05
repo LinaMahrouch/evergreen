@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import { AppState, Platform, View } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { usePrefs } from '@/store/usePrefs'
 import { useStore } from '@/store/useStore'
 import { C } from '@/ui'
 
@@ -20,7 +21,7 @@ function useSyncLoop() {
 
 export default function RootLayout() {
   const ready = useStore(s => s.ready)
-  useEffect(() => { void useStore.getState().boot() }, [])
+  useEffect(() => { void useStore.getState().boot(); void usePrefs.getState().boot() }, [])
   useEffect(() => {
     // The page behind the app is the browser's, and white by default.
     if (Platform.OS === 'web' && typeof document !== 'undefined') {
