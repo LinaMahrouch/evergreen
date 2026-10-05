@@ -2461,4 +2461,9 @@ server.headersTimeout = 60000;
 // port that was actually bound: with PORT=0 the OS picks one, and a caller that did not choose it
 // (the tests spawn the server that way, and so does anyone running two instances on one box) has
 // no other way to learn it.
-server.listen(PORT, () => console.log(`gym-api on :${server.address().port} (rpID=${RP_ID}, origin=${ORIGIN})`));
+// HOST is optional and unset in the containers, where the api's network is already private to
+// the web container: node then binds every interface, as it always has. Run on a bare machine
+// (scripts/serve.mjs) the port would otherwise be reachable from the LAN, past the proxy whose
+// X-Forwarded-For TRUST_PROXY believes — so that launcher sets HOST=127.0.0.1.
+const HOST = process.env.HOST || undefined;
+server.listen(PORT, HOST, () => console.log(`gym-api on ${HOST ? HOST : ''}:${server.address().port} (rpID=${RP_ID}, origin=${ORIGIN})`));

@@ -1,5 +1,13 @@
 {
   "devDependencies": {
     "js-yaml": "^4.1.0"
-  }
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "server": "node scripts/serve.mjs",
+    "pair": "npm --prefix mcp run pair --",
+    "test": "npm --prefix mcp test && npm --prefix api test"
+  },
+  "name": "evergreen",
+  "private": true
 }

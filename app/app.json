@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "Evergreen",
+    "slug": "evergreen",
+    "version": "1.0.0",
+    "scheme": "evergreen",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#000000",
+    "primaryColor": "#14532D",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.linamahrouch.evergreen",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsLocalNetworking": true
+        },
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.linamahrouch.evergreen",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#000000",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png",
+      "name": "Evergreen",
+      "shortName": "Evergreen",
+      "description": "A minimalist gym tracker. Plan routines, log workouts, track your weight.",
+      "themeColor": "#000000",
+      "backgroundColor": "#000000",
+      "display": "standalone"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-sharing",
+      "expo-secure-store",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ]
+  }
+}

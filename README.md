@@ -1,3 +1,8 @@
+> **This is a fork of openGym.** It adds *Evergreen*, a minimalist app for web, Android and iOS
+> (`app/`), planning tools for the AI assistant bridge (`mcp/`), and a way to run everything
+> without Docker. Start with **[EVERGREEN.md](EVERGREEN.md)**. What follows is openGym's own
+> README, unchanged; the original is at <https://github.com/DuarteSantos8/openGym>.
+
 <div align="center">
 
 <img src="assets/banner.png" alt="openGym" width="720">

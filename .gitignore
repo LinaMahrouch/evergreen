@@ -21,3 +21,6 @@ node_modules
 junit.xml
 coverage/
 frontend/bundle-size.json
+
+# MCP pairing token (npm run pair)
+mcp/.auth.json

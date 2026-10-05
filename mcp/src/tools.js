@@ -167,8 +167,15 @@ export const getWeekPlan = {
     return {
       today: isoToday,
       weekdays: [0, 1, 2, 3, 4, 5, 6].map(d => {
-        const rid = S.week?.[d] || null
-        const r = rid ? (S.routines || []).find(x => x.id === rid) : null
+        // A weekday holds a list of routine ids (a combined session is two of them); a profile
+        // from before that holds one bare id. `[].concat` reads both, the way the app does
+        // (lib/history.js effectiveRoutineIds). Looking the list itself up as an id found
+        // nothing, so every scheduled day read as a rest day.
+        const onDay = [].concat(S.week?.[d] || [])
+          .map(id => (S.routines || []).find(x => x.id === id))
+          .filter(Boolean)
+        const r = onDay[0] || null
+        const rid = r ? r.id : null
         // Surface today's override only (not the whole dayPlan dict — usually empty, but might
         // have grown from repeated "move this day" actions).
         const overrideForToday = d === todayWd ? (S.dayPlan?.[isoToday] ?? null) : null
@@ -178,6 +185,9 @@ export const getWeekPlan = {
           routine_id: rid,
           routine_name: r?.name || null,
           routine_emoji: r?.emoji || null,
+          // Every routine on the day, in session order. routine_id/routine_name above are the
+          // first of these, kept for callers written when a day held one.
+          routines: onDay.map(x => ({ id: x.id, name: x.name })),
           override_for_today_or_null: overrideForToday
         }
       }),
