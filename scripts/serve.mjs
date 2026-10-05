@@ -36,6 +36,10 @@ loadEnv(path.join(ROOT, '.env'))
 const WEB_PORT = Number(process.env.WEB_PORT) || 8080
 const APP_PORT = Number(process.env.APP_PORT) || 8081
 const API_PORT = Number(process.env.PORT) || 3000
+// Who may connect. This computer only, unless BIND says otherwise: BIND=0.0.0.0 opens both
+// sites to the whole network (a phone on the same Wi-Fi), and openGym lets anyone who can
+// reach it create a profile unless INVITE_ONLY=1 is set as well.
+const BIND = process.env.BIND || '127.0.0.1'
 const ORIGIN = process.env.ORIGIN || `http://localhost:${WEB_PORT}`
 const DATA_DIR = path.resolve(ROOT, process.env.DATA_DIR || 'data')
 const WEB_DIST = path.join(ROOT, 'frontend', 'dist')
@@ -166,7 +170,7 @@ http.createServer((req, res) => {
     }
   }
   webSite(req, res, pathname)
-}).listen(WEB_PORT, () => {
+}).listen(WEB_PORT, BIND, () => {
   console.log(`\n  openGym web + api   ${ORIGIN}`)
   console.log(`  data folder         ${DATA_DIR}   (back this up)`)
 })
@@ -177,7 +181,7 @@ if (fs.existsSync(path.join(APP_DIST, 'index.html'))) {
     let pathname
     try { pathname = new URL(req.url, 'http://x').pathname } catch { res.writeHead(400, SECURITY); return res.end() }
     appSite(req, res, pathname)
-  }).listen(APP_PORT, () => console.log(`  Evergreen web app   http://localhost:${APP_PORT}\n`))
+  }).listen(APP_PORT, BIND, () => console.log(`  Evergreen web app   http://localhost:${APP_PORT}\n`))
 } else {
   console.log('  (Evergreen web app not exported yet — `npm run setup` builds it)\n')
 }

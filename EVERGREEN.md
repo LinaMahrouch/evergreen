@@ -156,8 +156,10 @@ opens full-screen and works offline.
 
 On the phone the app works alone straight away. To sync it, the phone has to reach your server:
 
-- **At home, same Wi-Fi:** in `.env` set `ORIGIN=http://YOUR-PC-IP:8080` (find the IP with
-  `ipconfig`), restart `npm run server`, and enter `YOUR-PC-IP:8080` in the app. It only syncs
+- **At home, same Wi-Fi:** in `.env` set `BIND=0.0.0.0` and `ORIGIN=http://YOUR-PC-IP:8080`
+  (find the IP with `ipconfig`). Without `BIND` the server answers this computer only. With
+  it, anyone on your Wi-Fi can open openGym and create a profile of their own (not read
+  yours); add `INVITE_ONLY=1` to stop that. Then restart `npm run server`, and enter `YOUR-PC-IP:8080` in the app. It only syncs
   while you are home.
 - **Anywhere:** the server has to be on the internet with HTTPS, on a small cloud server or
   through a tunnel. [docs/SELF_HOSTING.md](docs/SELF_HOSTING.md) walks through the options

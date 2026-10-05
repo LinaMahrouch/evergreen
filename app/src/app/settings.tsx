@@ -73,11 +73,12 @@ export default function Settings() {
   const erase = async () => {
     const ok = await confirm(
       'Erase everything?',
-      'Every routine, workout and weigh-in on this device is deleted. This cannot be undone. Export a backup first if you might want it back.',
+      'Every routine, workout and weigh-in on this device is deleted, and the conversation with the coach. This cannot be undone. Export a backup first if you might want it back.',
       'Erase',
     )
     if (!ok) return
     replace({ ...DEF, unit: S.unit })
+    coach.clear()
     useStore.getState().discardWorkout()
     router.dismissTo('/')
   }

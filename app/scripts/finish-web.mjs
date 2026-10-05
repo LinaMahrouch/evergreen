@@ -102,8 +102,34 @@ self.addEventListener('fetch', event => {
 
 /* ---------- index.html ---------- */
 
+// What the page may load and run: its own files and nothing else. No script from another
+// origin and no inline script can run, so text that reaches the page from outside (a routine
+// name synced from a server, an imported backup) can never become code that reads what the
+// browser stores here — the profile, the server token, the coach's API key. Requests may go
+// to any server, because the app pairs with whatever address its owner types.
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",   // react-native-web writes its styles into a <style> tag
+  "img-src 'self' data: blob:",
+  "font-src 'self' data:",
+  "connect-src 'self' https: http:",
+  "worker-src 'self'",
+  "manifest-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'none'"
+].join('; ')
+
+// Its own file, not an inline script, so the policy above needs no exception for it.
+fs.writeFileSync(path.join(DIST, 'register-sw.js'), `if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}) })
+}
+`)
+
 let html = fs.readFileSync(indexFile, 'utf8')
 const head = `
+    <meta http-equiv="Content-Security-Policy" content="${CSP}" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -116,11 +142,7 @@ const head = `
     <style>html, body, #root { background: #000; } body { margin: 0; -webkit-tap-highlight-color: transparent; }</style>
   </head>`
 const boot = `
-    <script>
-      if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-        window.addEventListener('load', function () { navigator.serviceWorker && navigator.serviceWorker.register('/sw.js').catch(function () {}) })
-      }
-    </script>
+    <script src="/register-sw.js" defer></script>
   </body>`
 if (!html.includes('manifest.webmanifest')) {
   html = html
@@ -139,11 +161,13 @@ fs.writeFileSync(path.join(DIST, 'vercel.json'), JSON.stringify({
   rewrites: [{ source: '/((?!_expo/|assets/|.*\\.[a-z0-9]+$).*)', destination: '/index.html' }],
   headers: [
     { source: '/_expo/static/(.*)', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
-    { source: '/(sw.js|index.html|manifest.webmanifest)', headers: [{ key: 'Cache-Control', value: 'no-cache' }] },
+    { source: '/(sw.js|register-sw.js|index.html|manifest.webmanifest)', headers: [{ key: 'Cache-Control', value: 'no-cache' }] },
     { source: '/(.*)', headers: [
       { key: 'X-Content-Type-Options', value: 'nosniff' },
       { key: 'X-Frame-Options', value: 'DENY' },
-      { key: 'Referrer-Policy', value: 'same-origin' }
+      { key: 'Referrer-Policy', value: 'same-origin' },
+      { key: 'Content-Security-Policy', value: CSP + "; frame-ancestors 'none'" },
+      { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=()' }
     ] }
   ]
 }, null, 2))
